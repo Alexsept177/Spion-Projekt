@@ -2,6 +2,7 @@
 using UnityEngine.InputSystem;
 #endif
 
+using System;
 using UnityEngine;
 
 namespace UnityTemplateProjects
@@ -296,6 +297,11 @@ namespace UnityTemplateProjects
 #else
             return Input.GetMouseButtonUp(1);
 #endif
+        }
+
+        internal void SetTilt(float v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
