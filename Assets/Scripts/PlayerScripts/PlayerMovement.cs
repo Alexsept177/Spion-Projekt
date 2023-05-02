@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityTemplateProjects;
-
 public class PlayerMovement : MonoBehaviour
 {
     //Ground
@@ -44,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     public bool jump;
     public bool crouched;
     public bool grounded;
-
+    public bool Wallruning;
     Collider ground;
 
     Vector3 groundNormal = Vector3.up;
@@ -70,13 +68,13 @@ public class PlayerMovement : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
     }
 
-    void OnGUI()
+    public void OnGUI()
     {
         GUILayout.Label("Speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
         GUILayout.Label("SpeedUp: " + rb.velocity.y);
     }
 
-    void Update()
+    public void Update()
     {
         col.material.dynamicFriction = 0f;
         dir = Direction();
@@ -223,7 +221,6 @@ public class PlayerMovement : MonoBehaviour
                 //camCon.Punch(new Vector2(0, -3f));
             }
             //StartCoroutine(bHopCoroutine(bhopLeniency));
-            gameObject.SendMessage("OnStartWalking");
             mode = Mode.Walking;
         }
     }
@@ -244,13 +241,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void EnterWallrun()
+   public void EnterWallrun()
     {
         if (mode != Mode.Wallruning)
         {
             if (VectorToGround().magnitude > 0.2f && CanRunOnThisWall(bannedGroundNormal) && wallStickTimer == 0f)
             {
-                gameObject.SendMessage("OnStartWallrunning");
                 wrTimer = wallRunTime;
                 canDJump = true;
                 mode = Mode.Wallruning;
@@ -270,7 +266,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jump && canJump)
         {
-            gameObject.SendMessage("OnJump");
             Jump();
         }
         else
@@ -304,7 +299,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jump && !crouched)
         {
-            gameObject.SendMessage("OnDoubleJump");
             DoubleJump(wishDir);
         }
 
@@ -389,7 +383,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void DoubleJump(Vector3 wishDir)
+    public void DoubleJump(Vector3 wishDir)
     {
         if (canDJump)
         {
@@ -451,7 +445,7 @@ public class PlayerMovement : MonoBehaviour
         return vect;
     }
 
-    float WallrunCameraAngle()
+    public float WallrunCameraAngle()
     {
         Vector3 rotDir = Vector3.ProjectOnPlane(groundNormal, Vector3.up);
         Quaternion rotation = Quaternion.AngleAxis(-90f, Vector3.up);
